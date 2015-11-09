@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>ajax省/市/地三级联动实例</title>
+<script type="text/javascript" src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+@charset "utf-8";
+body,html{ font-size:14px; color:#666; font-family:宋体; line-height:20px}
+body, div, dl, dt, dd, ul, li, h1, h2, h3, h4, h5, h6,
+pre, form, fieldset, input, textarea, p, th, td { padding: 0; margin: 0; }
+header, nav, section, article, aside, footer{ display:block; } 
+table { border-collapse: collapse; border-spacing: 0; }
+img { border: 0; }
+ul { list-style: none; }
+th { text-align: left; } 
+section{ margin:0 auto; width:800px;}
+section div{ float:left; width:180px; margin:0 0 0 20px;border:solid 1px #333;padding:5px; border-radius:5px;}
+section div ul{display:none; color:#333; height:auto; max-height:300px; padding:10px;overflow-y:scroll; line-height:25px; cursor:pointer;}
+</style>
+<script>
+$(function(){
+	//全局获取
+	/*$.ajax({
+		'url':'address.json',	
+		'dataType':'json', 
+		success: function(json,txt,xhr){
+			var txts1,txts2,txts3
+			var jsonData = json.data
+			for (var i = 0; i < jsonData.length; i++) {
+				txts1 += "<option>"+jsonData[i].province+"</option>"
+				for(j=0;j<jsonData[i].cityItems.length;j++){
+					txts2 += "<option>"+jsonData[i].cityItems[j].city+"</option>"
+					for(k=0;k<jsonData[i].cityItems[j].areaItems.length;k++){
+						txts3 += "<option>"+jsonData[i].cityItems[j].areaItems[k].area+"</option>"	
+					}
+				}
+			}
+			$("#province").append(txts1);
+			$("#city").append(txts2);
+			$("#area").append(txts3); 
+		}
+	})*/
+	
+	$.ajax({
+		'url':'address.json',	
+		'dataType':'json', 
+		success: function(json,txt,xhr){
+			jsonData = json.data
+			txts1="",txts2="",txts3=""
+			for (var i = 0; i < jsonData.length; i++) {
+				txts1 += "<li>"+jsonData[i].province+"</li>"
+			}
+			$("#province ul").append(txts1)
+		}
+	})		
+	
+	//数据下拉
+	$("#province").on("click",function(){
+		$(this).children("ul").show();
+		$("#city span").text("请选择城市")
+		$("#area span").text("请选择地区")
+	}).mouseleave(function() {
+		$(this).children("ul").hide();
+	});
+	
+	$("#city").on("click",function(){
+		$(this).children("ul").show();
+	}).mouseleave(function() {
+		$(this).children("ul").hide();
+	});	
+	
+	$("#area").on("click",function(){
+		$(this).children("ul").show();
+	}).mouseleave(function() {
+		$(this).children("ul").hide();
+	});
+	
+	
+	//调用数据
+	$("#province").on("click","ul li",function(){
+		var _index = $(this).index()
+		$("#province span").text($("#province li").eq(_index).text())
+		var cities=""
+		province = jsonData[_index]
+		for(j=0;j<province.cityItems.length;j++){
+			cities += "<li city_id='"+province.cityItems[j].city_id+"'>"+province.cityItems[j].city+"</li>"
+		}
+		$("#city ul").html(cities);
+	})
+	$("#city").on("click","ul li",function(){
+		var index = $(this).index()	
+		$("#city span").text($("#city li").eq(index).text())
+		var areas=""
+		for(k=0;k<province.cityItems[index].areaItems.length;k++){
+			areas += "<li area_id='"+province.cityItems[index].areaItems[k].area_id+"'>"+province.cityItems[index].areaItems[k].area+"</li>"	
+		}
+		$("#area ul").html(areas);
+	})	
+	$("#area").on("click","ul li",function(){
+		var i = $(this).index()	
+		$("#area span").text($("#area li").eq(i).text())
+	})
+	
+	
+		
+		
+	/*通过点击单独获取
+	
+	$("#province").click(function(){
+		$.ajax({
+			'url':'address.json',	
+			'dataType':'json', 
+			success: function(json,txt,xhr){
+				var txts = ""
+				var jsonData = json.data;
+				for (var i = 0; i < jsonData.length; i++) {
+					 txts += "<option>"+jsonData[i].province+"</option>" 
+				}
+				$("#province").append(txts);
+			}
+		})	
+	})
+	$("#city").click(function(){
+		$.ajax({
+			'url':'address.json',	
+			'dataType':'json', 
+			success: function(json,txt,xhr){
+				var txts = ""
+				var jsonData = json.data;
+				for (var i = 0; i < jsonData.length; i++) {
+					for(j=0;j<jsonData[i].cityItems.length;j++){
+						txts += "<option>"+jsonData[i].cityItems[j].city+"</option>"	
+					}
+				}
+				$("#city").append(txts); 
+			}
+		})	
+	})
+	$("#area").click(function(){
+		$.ajax({
+			'url':'address.json',	
+			'dataType':'json', 
+			success: function(json,txt,xhr){
+				var txts = ""
+				var jsonData = json.data;
+				for (var i = 0; i < jsonData.length; i++) {
+					for(j=0;j<jsonData[i].cityItems.length;j++){
+						for(k=0;k<jsonData[i].cityItems[j].areaItems.length;k++){
+							txts += "<option>"+jsonData[i].cityItems[j].areaItems[k].area+"</option>"	
+						}
+					}
+				}
+				$("#area").append(txts); 
+			}
+		})	
+	})	*/
+	
+	
+})
+</script>
+
+</head>
+
+<body>
+<section>
+    <div id="province">
+        <span>请选择省份</span>
+        <ul></ul>
+    </div>
+    <div id="city">
+    	<span>请选择城市</span>
+        <ul></ul>
+    </div>
+    <div id="area">
+    	<span>请选择地区</span>
+        <ul></ul>
+    </div>
+</section>
+</body>
+</html>

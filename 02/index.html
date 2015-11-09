@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>jQuery+PHP实现浏览更多内容</title>
+<style type="text/css">
+#more{margin:10px auto;width: 560px;  border: 1px solid #999;}               
+.single_item{padding: 20px; border-bottom: 1px dotted #d3d3d3;}
+.author{position: absolute; left: 0px; font-weight:bold; color:#39f}
+.date{position: absolute; right: 0px; color:#999}
+.content{line-height:20px; word-break: break-all;}
+.element_head{width: 100%; position: relative; height: 20px;}
+.get_more{margin:10px; text-align:center}
+.more_loader_spinner{width:20px; height:20px; margin:10px auto; background: url(loader.gif) no-repeat;}
+</style>
+<script type="text/javascript" src="http://mobile.yesky.com/fashion/js/jquery.min.js"></script>
+<script type="text/javascript" src="jquery.more.js"></script>
+<script type="text/javascript">
+$(function(){
+	$('#more').more({'address': 'data.php'})
+});
+</script>
+</head>
+
+<body>
+
+<div id="main">
+  <div id="more">
+        <div class="single_item">
+             <div class="element_head">
+                  <div class="date"></div>
+                  <div class="author"></div>
+              </div>
+              <div class="content"></div>
+        </div>
+        <a href="javascript:;" class="get_more">::点击加载更多内容::</a>
+  </div> 
+</div>
+</body>
+</html>
